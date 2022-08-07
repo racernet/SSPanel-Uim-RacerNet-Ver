@@ -50,6 +50,8 @@ final class StripeCheckout extends AbstractPayment
             $response->withStatus(400, "Stripe webhook endpoint check failed! Please contact your website admin.");
         }
 
+        \Stripe\Stripe::setApiKey(Setting::obtain(StripeCheckout::STRIPE_CHECKOUT_SECRET_KEY));
+        
         $trade_no = uniqid();
         $user = Auth::getUser();
         $uid = $user->id;
@@ -92,7 +94,6 @@ final class StripeCheckout extends AbstractPayment
 
         $exchange_amount = $price / self::exchange(Setting::obtain(StripeCheckout::STRIPE_CHECKOUT_CURRENCY)) * 100;
 
-        \Stripe\Stripe::setApiKey(Setting::obtain(StripeCheckout::STRIPE_CHECKOUT_SECRET_KEY));
         $session = \Stripe\Checkout\Session::create([
             'customer' => $customer->id,
             'metadata' => [
