@@ -51,7 +51,7 @@ final class StripeCheckout extends AbstractPayment
         }
 
         \Stripe\Stripe::setApiKey(Setting::obtain(StripeCheckout::STRIPE_CHECKOUT_SECRET_KEY));
-        
+
         $trade_no = uniqid();
         $user = Auth::getUser();
         $uid = $user->id;
@@ -208,7 +208,7 @@ final class StripeCheckout extends AbstractPayment
 
         try {
             $event = \Stripe\Webhook::constructEvent(
-                $request,
+                $request->getBody(),
                 $sig_header,
                 $endpoint_secret
             );
