@@ -200,15 +200,16 @@ final class StripeCheckout extends AbstractPayment
      */
     public function webhookHandler(Request $request, Response $response, array $args): ResponseInterface
     {
-        \Stripe\Stripe::setApiKey(Setting::obtain('stripe_checkout_sk'));
+        \Stripe\Stripe::setApiKey(Setting::obtain(StripeCheckout::STRIPE_CHECKOUT_SECRET_KEY));
 
         $sig_header = $_SERVER['HTTP_STRIPE_SIGNATURE'];
         $event = null;
-        $endpoint_secret = Setting::obtain('stripe_webhook_endpoint_secret');   //Load endpoint signature
+        $payload = @file_get_contents('php://input');   // Do not use getBody etc. Must be this payload
+        $endpoint_secret = Setting::obtain(StripeCheckout::STRIPE_WEBHOOK_ENDPOINT_SECRET);   //Load endpoint secret
 
         try {
             $event = \Stripe\Webhook::constructEvent(
-                $request->getBody(),
+                $payload,
                 $sig_header,
                 $endpoint_secret
             );
