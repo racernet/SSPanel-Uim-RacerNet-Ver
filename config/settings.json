@@ -1027,7 +1027,7 @@
         "is_public": 0,
         "type": "string",
         "default": "",
-        "mark": "Webhook 端点密钥"
+        "mark": "Webhook 端点密钥（程序自动更新，不了解的不要主动修改）"
     },
     {
         "id": null,
