@@ -1588,7 +1588,7 @@
                 dataType: "json",
                 data: {
                     class: 'stripe',
-                    stripe_card: $$getValue('stripe_checkout_select'),
+                    stripe_checkout: $$getValue('stripe_checkout_select'),
                     stripe_currency: $$getValue('stripe_checkout_currency'),
                     stripe_min_recharge: $$getValue('stripe_checkout_min_recharge'),
                     stripe_max_recharge: $$getValue('stripe_checkout_max_recharge'),
