@@ -226,17 +226,14 @@ final class StripeCheckout extends AbstractPayment
             case \Stripe\Event::CHECKOUT_SESSION_COMPLETED:
                 return $this->checkoutCompletedEvent($request, $response, $event->data->object);
             default:
-                return $response->withStatus(400, 'Not a valid event');
+                return $response->withStatus(200, 'Not handler this event');
         }
     }
 
 
     public function checkoutCompletedEvent(Request $request, Response $response, \Stripe\Checkout\Session $checkout)
     {
-        $addnum = $checkout->id;                        //Checkout Session ID
-        $uid = $checkout->client_reference_id;          //User id
-        $currency = $checkout->currency;
-        $live_mode = $checkout->livemode;
+        $trade_no = $checkout->metadata->trade_no;                        //Checkout Session ID
 
         /**
          * Extract payment method information from checkout session.
@@ -260,8 +257,8 @@ final class StripeCheckout extends AbstractPayment
             return $response->withStatus(400, 'Not a valid checkout session, no payment info');
         }
 
-        $this->postPayment($addnum, $this->_readableName() . ' 在线支付');
+        $this->postPayment($trade_no, $this->_readableName() . ' 在线支付');
 
-        return $response->withStatus(200);
+        return $response->withStatus(200, "Success");
     }
 }
