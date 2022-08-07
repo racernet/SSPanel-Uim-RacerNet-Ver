@@ -179,7 +179,6 @@ final class StripeCheckout extends AbstractPayment
         $new_endpoint = $stripe->webhookEndpoints->create([
             'url' => $webhook_url,
             'enabled_events' => StripeCheckout::STRIPE_CHECKOUT_ENABLED_EVENTS,
-            "status" => "enabled",
         ]);
 
         $setting = Setting::where('item', '=', StripeCheckout::STRIPE_WEBHOOK_ENDPOINT_SECRET)->first();
