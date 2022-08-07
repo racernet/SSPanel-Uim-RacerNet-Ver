@@ -24,7 +24,7 @@
         "sentry/sentry": "^3",
         "slim/slim": "~3.0",
         "smarty/smarty": "^3",
-        "stripe/stripe-php": "^7.105",
+        "stripe/stripe-php": "^9.0.0",
         "symfony/yaml": "^5",
         "telegram-bot/api": "^2.2",
         "voku/anti-xss": "^4",
@@ -39,7 +39,10 @@
     },
     "config": {
         "sort-packages": true,
-        "optimize-autoloader": true
+        "optimize-autoloader": true,
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
     },
     "require-dev": {
         "nunomaduro/phpinsights": "^2.2"

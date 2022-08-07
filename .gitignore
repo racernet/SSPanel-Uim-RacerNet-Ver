@@ -7,6 +7,7 @@ composer.lock
 .php_cs.cache
 .env
 vendor
+*.code-workspace
 
 php_errors.log
 composer.phar
