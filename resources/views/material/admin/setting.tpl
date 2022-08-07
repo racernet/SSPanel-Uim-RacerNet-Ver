@@ -1587,14 +1587,14 @@
                 url: "/admin/setting",
                 dataType: "json",
                 data: {
-                    class: 'stripe',
+                    class: 'stripe_checkout',
                     stripe_checkout: $$getValue('stripe_checkout_select'),
-                    stripe_currency: $$getValue('stripe_checkout_currency'),
-                    stripe_min_recharge: $$getValue('stripe_checkout_min_recharge'),
-                    stripe_max_recharge: $$getValue('stripe_checkout_max_recharge'),
-                    stripe_pk: $$getValue('stripe_checkout_pk'),
-                    stripe_sk: $$getValue('stripe_checkout_sk'),
-                    stripe_webhook_key: $$getValue('stripe_webhook_endpoint_secret')
+                    stripe_checkout_currency: $$getValue('stripe_checkout_currency'),
+                    stripe_checkout_min_recharge: $$getValue('stripe_checkout_min_recharge'),
+                    stripe_checkout_max_recharge: $$getValue('stripe_checkout_max_recharge'),
+                    stripe_checkout_pk: $$getValue('stripe_checkout_pk'),
+                    stripe_checkout_sk: $$getValue('stripe_checkout_sk'),
+                    stripe_webhook_endpoint_secret: $$getValue('stripe_webhook_endpoint_secret')
                 },
                 success: data => {
                     $("#result").modal();

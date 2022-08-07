@@ -162,7 +162,7 @@ final class StripeCheckout extends AbstractPayment
         $stripe = new \Stripe\StripeClient(Setting::obtain(StripeCheckout::STRIPE_CHECKOUT_SECRET_KEY));
         $all_webhoooks = $stripe->webhookEndpoints->all()->data;
 
-        $webhook_url = $_ENV['baseUrl'] . "/payment/notify/" + $this->_name();
+        $webhook_url = $_ENV['baseUrl'] . "/payment/notify/" . $this->_name();
 
         foreach ($all_webhoooks as $key => $webhook) {
             if ($webhook->status == "enabled") {
