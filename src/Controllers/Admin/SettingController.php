@@ -6,6 +6,7 @@ namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
 use App\Models\Setting;
+use App\Services\Gateway\StripeCheckout;
 use App\Services\Mail;
 use App\Services\Payment;
 
@@ -39,7 +40,7 @@ final class SettingController extends BaseController
         $class = $request->getParam('class');
 
         switch ($class) {
-            // 支付
+                // 支付
             case 'f2f_pay':
                 $list = ['f2f_pay_app_id', 'f2f_pay_pid', 'f2f_pay_public_key', 'f2f_pay_private_key', 'f2f_pay_notify_url'];
                 break;
@@ -47,7 +48,7 @@ final class SettingController extends BaseController
                 $list = ['vmq_gateway', 'vmq_key'];
                 break;
             case 'payjs_pay':
-                $list = ['payjs_url','payjs_mchid', 'payjs_key'];
+                $list = ['payjs_url', 'payjs_mchid', 'payjs_key'];
                 break;
             case 'theadpay':
                 $list = ['theadpay_url', 'theadpay_mchid', 'theadpay_key'];
@@ -64,7 +65,7 @@ final class SettingController extends BaseController
             case 'e_pay':
                 $list = ['epay_url', 'epay_pid', 'epay_key'];
                 break;
-            // 邮件
+                // 邮件
             case 'mail':
                 $list = ['mail_driver'];
                 break;
@@ -80,7 +81,7 @@ final class SettingController extends BaseController
             case 'ses':
                 $list = ['aws_access_key_id', 'aws_secret_access_key'];
                 break;
-            // 验证码
+                // 验证码
             case 'verify_code':
                 $list = ['captcha_provider', 'enable_reg_captcha', 'enable_login_captcha', 'enable_checkin_captcha'];
                 break;
@@ -90,35 +91,39 @@ final class SettingController extends BaseController
             case 'verify_code_geetest':
                 $list = ['geetest_id', 'geetest_key'];
                 break;
-            // 备份
+                // 备份
             case 'email_backup':
                 $list = ['auto_backup_email', 'auto_backup_password', 'auto_backup_notify'];
                 break;
-            // 客户服务
+                // 客户服务
             case 'admin_contact':
                 $list = ['enable_admin_contact', 'admin_contact1', 'admin_contact2', 'admin_contact3'];
                 break;
             case 'web_customer_service_system':
                 $list = ['live_chat', 'tawk_id', 'crisp_id', 'livechat_id', 'mylivechat_id'];
                 break;
-            // 个性化
+                // 个性化
             case 'background_image':
                 $list = ['user_center_bg', 'admin_center_bg', 'user_center_bg_addr', 'admin_center_bg_addr'];
                 break;
-            // 注册设置
+                // 注册设置
             case 'register':
                 $list = ['reg_mode', 'reg_email_verify', 'email_verify_ttl', 'email_verify_ip_limit'];
                 break;
             case 'register_default_value':
                 $list = ['sign_up_for_free_traffic', 'sign_up_for_free_time', 'sign_up_for_class', 'sign_up_for_class_time', 'sign_up_for_invitation_codes', 'connection_device_limit', 'connection_rate_limit', 'sign_up_for_method', 'sign_up_for_protocol', 'sign_up_for_protocol_param', 'sign_up_for_obfs', 'sign_up_for_obfs_param', 'sign_up_for_daily_report'];
                 break;
-            // 邀请设置
+                // 邀请设置
             case 'invitation_reward':
                 $list = ['invitation_to_register_balance_reward', 'invitation_to_register_traffic_reward'];
                 break;
-            // 返利设置
+                // 返利设置
             case 'rebate_mode':
                 $list = ['invitation_mode', 'invite_rebate_mode', 'rebate_ratio', 'rebate_frequency_limit', 'rebate_amount_limit', 'rebate_time_range_limit'];
+                break;
+            case 'stripe_checkout':
+                // Stripe Checkout 在线支付配置
+                $list = [StripeCheckout::_name(), StripeCheckout::STRIPE_CHECKOUT_CURRENCY, StripeCheckout::STRIPE_CHECKOUT_PUBLIC_KEY, StripeCheckout::STRIPE_CHECKOUT_SECRET_KEY, StripeCheckout::STRIPE_WEBHOOK_ENDPOINT_SECRET, StripeCheckout::STRIPE_CHECKOUT_MIN_RECHARGE, StripeCheckout::STRIPE_CHECKOUT_MAX_RECHARGE];
                 break;
         }
 
@@ -131,7 +136,7 @@ final class SettingController extends BaseController
                 $setting->value = $request->getParam("${item}");
             }
 
-            if (! $setting->save()) {
+            if (!$setting->save()) {
                 return $response->withJson([
                     'ret' => 0,
                     'msg' => "保存 ${item} 时出错",

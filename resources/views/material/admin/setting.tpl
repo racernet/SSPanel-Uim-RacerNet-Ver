@@ -402,6 +402,54 @@
 
                                         <button id="submit_stripe" type="submit" class="btn btn-block btn-brand">提交</button>
                                     </div>
+
+                                    <div class="tab-pane fade" id="stripe_checkout">
+                                        <p class="form-control-guide"><i class="material-icons">warning</i>提供虚拟专用网络业务符合 Stripe 用户协议，但可能不符合 Stripe 提供的部分支付通道（如支付宝、微信）用户协议，相关支付通道可能存在被关闭的风险</p>
+                                        <h5>支付渠道</h5>
+                                        <!-- stripe_card_select -->
+                                        <div class="form-group form-group-label">
+                                            <label class="floating-label">Stripe Checkout 在线支付</label>
+                                            <select id="stripe_checkout_select" class="form-control maxwidth-edit">
+                                                <option value="0">停用</option>
+                                                <option value="1" {if $settings['stripe_checkout'] == true}selected{/if}>
+                                                    启用
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <h5>支付设置</h5>
+                                        <!-- stripe_currency -->
+                                        <div class="form-group form-group-label">
+                                            <label class="floating-label">支付货币（ISO 3位货币代码）</label>
+                                            <input class="form-control maxwidth-edit" id="stripe_checkout_currency" value="{$settings['stripe_checkout_currency']}">
+                                        </div>
+                                        <!-- stripe_min_recharge -->
+                                        <div class="form-group form-group-label">
+                                            <label class="floating-label">最低充值限额（整数）</label>
+                                            <input class="form-control maxwidth-edit" id="stripe_checkout_min_recharge" value="{$settings['stripe_checkout_min_recharge']}">
+                                        </div>
+                                        <!-- stripe_max_recharge -->
+                                        <div class="form-group form-group-label">
+                                            <label class="floating-label">最高充值限额（整数）</label>
+                                            <input class="form-control maxwidth-edit" id="stripe_checkout_max_recharge" value="{$settings['stripe_checkout_max_recharge']}">
+                                        </div>
+                                        <!-- stripe_pk -->
+                                        <div class="form-group form-group-label">
+                                            <label class="floating-label">Stripe 客户端公钥</label>
+                                            <input class="form-control maxwidth-edit" id="stripe_checkout_pk" value="{$settings['stripe_checkout_pk']}">
+                                        </div>
+                                        <!-- stripe_sk -->
+                                        <div class="form-group form-group-label">
+                                            <label class="floating-label">Stripe 客户端私钥</label>
+                                            <input class="form-control maxwidth-edit" id="stripe_checkout_sk" value="{$settings['stripe_checkout_sk']}">
+                                        </div>
+                                        <!-- stripe_webhook_key -->
+                                        <div class="form-group form-group-label">
+                                            <label class="floating-label">WebHook 端点密钥</label>
+                                            <input class="form-control maxwidth-edit" id="stripe_webhook_endpoint_secret" value="{$settings['stripe_webhook_endpoint_secret']}">
+                                        </div>
+
+                                        <button id="submit_stripe_checkout" type="submit" class="btn btn-block btn-brand">提交</button>
+                                    </div>
                                     
                                     <div class="tab-pane fade" id="vmqpay">
                                         <p class="form-control-guide"><i class="material-icons">info</i>此支付方式需自建网关并配置各项参数。访问 <a href="https://github.com/szvone/vmqphp" target="view_window">https://github.com/szvone/vmqphp</a> 了解更多</p>
@@ -1513,6 +1561,40 @@
                     stripe_pk: $$getValue('stripe_pk'),
                     stripe_sk: $$getValue('stripe_sk'),
                     stripe_webhook_key: $$getValue('stripe_webhook_key')
+                },
+                success: data => {
+                    $("#result").modal();
+                    $$.getElementById('msg').innerHTML = data.msg;
+                    if (data.ret) {
+                        window.setTimeout("location.href='/admin/setting'", {$config['jump_delay']});
+                    }
+                },
+                error: jqXHR => {
+                    alert(`发生错误：${
+                            jqXHR.status
+                            }`);
+                }
+            })
+        })
+    })
+</script>
+
+<script>
+    window.addEventListener('load', () => {
+        $$.getElementById('submit_stripe_checkout').addEventListener('click', () => {
+            $.ajax({
+                type: "POST",
+                url: "/admin/setting",
+                dataType: "json",
+                data: {
+                    class: 'stripe',
+                    stripe_card: $$getValue('stripe_checkout_select'),
+                    stripe_currency: $$getValue('stripe_checkout_currency'),
+                    stripe_min_recharge: $$getValue('stripe_checkout_min_recharge'),
+                    stripe_max_recharge: $$getValue('stripe_checkout_max_recharge'),
+                    stripe_pk: $$getValue('stripe_checkout_pk'),
+                    stripe_sk: $$getValue('stripe_checkout_sk'),
+                    stripe_webhook_key: $$getValue('stripe_webhook_endpoint_secret')
                 },
                 success: data => {
                     $("#result").modal();
