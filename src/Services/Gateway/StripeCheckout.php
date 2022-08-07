@@ -235,28 +235,6 @@ final class StripeCheckout extends AbstractPayment
     {
         $trade_no = $checkout->metadata->trade_no;                        //Checkout Session ID
 
-        /**
-         * Extract payment method information from checkout session.
-         */
-        $stripe = new \Stripe\StripeClient(Setting::obtain(StripeCheckout::STRIPE_CHECKOUT_SECRET_KEY));
-        $payment_intent = $stripe->paymentIntents->retrieve(
-            $checkout->payment_intent,
-            []
-        );
-
-        if (empty($payment_intent)) {
-            return $response->withStatus(400, 'Not a valid checkout session, no payment intent');    // Not valid checkout session
-        }
-
-        $payment_method = $stripe->paymentMethods->retrieve(
-            $payment_intent->payment_method,
-            []
-        );
-
-        if (empty($payment_method)) {
-            return $response->withStatus(400, 'Not a valid checkout session, no payment info');
-        }
-
         $this->postPayment($trade_no, $this->_readableName() . ' 在线支付');
 
         return $response->withStatus(200, "Success");
