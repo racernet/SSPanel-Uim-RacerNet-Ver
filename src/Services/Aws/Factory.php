@@ -31,7 +31,8 @@ final class Factory
         return self::createAwsClient()->createDynamoDb();
     }
 
-    public static function createSes(): void
+    public static function createSes()
     {
+        return self::createAwsClient()->createSes();
     }
 }
