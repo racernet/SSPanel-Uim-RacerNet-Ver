@@ -20,7 +20,7 @@ final class Ses extends Base
         return $_ENV['aws_ses_sender'];
     }
 
-    public function send($to, $subject, $text): void
+    public function send($to, $subject, $text, $files): void
     {
         $this->client->sendEmail([
             'Destination' => [ // REQUIRED
