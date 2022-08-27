@@ -72,7 +72,6 @@ final class StripeCheckout extends AbstractPayment
             $customer = \Stripe\Customer::create([
                 "email" => $customer_email,
                 "name" => $user->user_name,
-                "currency" => "CNY",
             ]);
         } else if ($customers->data[0]->name == null) {
             $customer = $customers->data[0];
